@@ -1,0 +1,112 @@
+<aura:component description="LC_QA_LeadMasive" controller="VF_QuickAction_LC_Ctrl"
+                implements="flexipage:availableForAllPageTypes,force:lightningQuickAction"
+                access="global" >
+    
+    <aura:attribute name="leadsListIds" type="List" />
+    <aura:attribute name="leadSelectedList" type="List" />
+    <aura:attribute name="errorMsg" type="String" />
+    
+    <aura:attribute access="public" name="recordList" type="Object" />
+    <aura:attribute access="public" name="jsonRecordList" type="Object" />
+    <aura:attribute access="public" name="showActions" type="Boolean"/>
+    <aura:attribute access="public" name="warningMsg" type="String" />
+    
+    <aura:attribute name="leadClosed" type="Lead" default="{'sobjectType' : 'Lead',
+                                                           'Status' : ''}" />
+    
+    <aura:attribute name="isBlocked" type="Boolean" default="false"/>
+    <aura:attribute name="loaded" type="Boolean" default="false" />
+    
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="data" type="Object" />
+    
+    <!-- Load data -->
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    
+    <!-- Libraries -->    
+    <lightning:notificationsLibrary aura:id="notifLib" />
+    
+    <!-- EMP API component -->
+    <lightning:workspaceAPI aura:id="workspace" />
+    
+    <!--Detail panel-->
+    <div id="closeMasive">
+        <div class="slds-form slds-form_stacked ">
+            
+            <div class="spinnerHolder">
+                <aura:if isTrue="{!v.loaded}">
+                    <lightning:spinner alternativeText="Loading" size="small" />
+                </aura:if>
+            </div>
+            
+            <aura:if isTrue="{!not(empty(v.warningMsg))}">
+                <div class="msg">
+                    <ui:message severity="confirm" closable="true">
+                        {!v.warningMsg}
+                    </ui:message>
+                </div>
+            </aura:if>
+            
+            <aura:if isTrue="{!not(empty(v.errorMsg))}">
+                <div class="msg">
+                    <ui:message severity="error" closable="true">
+                        {!v.errorMsg}
+                    </ui:message>
+                </div>
+            </aura:if>
+            <aura:if isTrue="{!v.showActions}">
+                <lightning:layout multipleRows="true">
+                    <lightning:layoutItem size="12" class="slds-p-bottom--small">
+                        <h3 class="slds-section-title--divider">
+                            Generar cierre masivo </h3>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="12" flexibility="auto"
+                                          padding="horizontal-small" >
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem size="4" flexibility="auto"
+                                                  padding="horizontal-small"  >
+                                <lightning:layout multipleRows="true">
+                                    <lightning:layoutItem flexibility="auto" 
+                                                          padding="around-small" alignmentBump="left">
+                                        
+                                        <lightning:input aura:id="Status" readonly="true" value="Closed - Converted"
+                                                         label="Estado" />
+                                        
+                                    </lightning:layoutItem>
+                                    
+                                </lightning:layout>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="8" flexibility="auto"
+                                                  padding="horizontal-small" >
+                                <lightning:layoutItem size="4" flexibility="auto" padding="around-small" alignmentBump="left">
+                                    <div class="slds-m-top_medium ">
+                                        <lightning:button variant="brand" disabled="{!v.selectedCause == ''}"
+                                                          onclick="{!c.generateCloseMasive}" label="Generar" />
+                                        
+                                    </div>
+                                    
+                                </lightning:layoutItem>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </aura:if>
+        </div>
+        
+    </div>
+    <div id="claimMasive">
+        
+        <lightning:card>
+            <!--<p class="slds-p-horizontal_small slds-box">-->
+            <p class="slds-p-horizontal_small">
+                <lightning:datatable columns="{! v.columns }" 
+                                     data="{! v.data }" 
+                                     keyField="id" 
+                                     hideCheckboxColumn="true"
+                                     showRowNumberColumn="true" />
+            </p>
+            
+        </lightning:card>
+    </div>
+    
+</aura:component>
