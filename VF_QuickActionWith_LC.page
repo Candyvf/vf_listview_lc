@@ -1,0 +1,42 @@
+<apex:page standardController="Lead" recordSetVar="leads" 
+        extensions="VF_QuickAction_LC_Ctrl" lightningStylesheets="true"
+        standardstylesheets="false" showHeader="false">
+    <apex:includeLightning />
+
+    <script>
+        /*var leadList = "{!myRecords}";
+        var leadSelectedList = "{!leadSelected}";
+        
+        var stringList = (leadSelectedList.replace('[','')).replace(']','');
+        var ids = (stringList.replace(' ','')).split(",");
+        console.log('***',  ids );*/
+        
+    var validActionsCMP = "{!validList}";
+    if (validActionsCMP === 'true') {
+            $Lightning.use("c:LC_APP_QA_LeadMasive", function () {
+                $Lightning.createComponent("c:LC_QA_LeadMasive",
+                    {
+                        showActions: '{!validList}',
+                        recordList: '{!recordList}',
+                        warningMsg: '{!warningMsg}'
+                    },
+                    "lightning",
+                    function () {
+                        // do some stuff 
+                    });
+            });
+    }
+
+    </script>
+    <apex:form >
+        <apex:pageBlock >
+            <apex:pageMessages />
+            <div id="lightning" />
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton value="Cancel" action="{!cancel}" />
+               <!-- <apex:commandButton disabled="{!if(validList != true, true, false)}" value="Save" action="{!save}" />
+               --> 
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
