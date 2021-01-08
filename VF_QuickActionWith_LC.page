@@ -4,13 +4,6 @@
     <apex:includeLightning />
 
     <script>
-        /*var leadList = "{!myRecords}";
-        var leadSelectedList = "{!leadSelected}";
-        
-        var stringList = (leadSelectedList.replace('[','')).replace(']','');
-        var ids = (stringList.replace(' ','')).split(",");
-        console.log('***',  ids );*/
-        
     var validActionsCMP = "{!validList}";
     if (validActionsCMP === 'true') {
             $Lightning.use("c:LC_APP_QA_LeadMasive", function () {
